@@ -10,7 +10,7 @@ import (
 
 type createAccountRequest struct {
 	Owner    string `json:"owner" binding:"required"`
-	Currency string `json:"currency" binding:"required,oneof=USD EUR INR"`
+	Currency string `json:"currency" binding:"required,currency"`
 }
 
 type getAccountRequest struct {
@@ -19,7 +19,7 @@ type getAccountRequest struct {
 
 type listAccountRequest struct {
 	PageID   int32 `form:"page_id" binding:"required,min=1"`
-	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
+	PageSize int32 `form:"page_size" binding:"required,min=5,max=20"`
 }
 
 type updateAccountRequest struct {
@@ -121,17 +121,17 @@ func (server *Server) updateAccount(ctx *gin.Context) {
 func (server *Server) deleteAccount(ctx *gin.Context) {
 	var req deleteAccountRequest
 
-	if err:=ctx.BindJSON(&req);err!=nil{
-		ctx.JSON(http.StatusBadRequest,errorResponse(err))
+	if err := ctx.BindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 
-	err:=server.store.DeleteAccount(ctx,req.ID)
+	err := server.store.DeleteAccount(ctx, req.ID)
 
-	if err!=nil{
-		ctx.JSON(http.StatusInternalServerError,errorResponse(err))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK,"Deleted")
+	ctx.JSON(http.StatusOK, "Deleted")
 }
