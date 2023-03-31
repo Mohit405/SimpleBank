@@ -9,8 +9,8 @@ import (
 // Store provies all function to execute db queries and transactions
 
 type Store interface {
-	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
 	Querier
+	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
 }
 type SQLStore struct {
 	*Queries // composition to extend struct functionalities to store struct instead of inheritance
